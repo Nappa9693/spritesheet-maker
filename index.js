@@ -9,7 +9,7 @@ async function main() {
             input, output
         });
 
-        const srcDirectory = await rl.question('Source Directory: ');
+        const srcDirectory = (await rl.question('Source Directory: '));
         const destination = await rl.question('Destination: ');
 
         // Get files to combine.
@@ -25,7 +25,7 @@ async function main() {
 
         console.log('Combining images into spritesheet...');
         for(let i=0; i < files.length; i++) {
-            const image = await Jimp.read('test_images/' + files[i]);
+            const image = await Jimp.read(`${srcDirectory}/${files[i]}`);
 
             if (i === 0) {
                 imageWidth = image.width;
