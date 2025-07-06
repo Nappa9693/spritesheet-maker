@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const { Jimp } = require('jimp');
 const fs = require('fs');
 const readline = require('node:readline/promises');
