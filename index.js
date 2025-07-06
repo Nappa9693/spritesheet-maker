@@ -30,7 +30,7 @@ async function main() {
 
         console.log(`Columns: ${columnsCount}, Calculated rows: ${rowCount}`);
         console.log('Combining images into spritesheet...');
-        for(let i=0; i < files.length; i++) {
+        for(let i=0; i < (files.length - files.length % columnsCount) ; i++) {
             const image = await Jimp.read(`${srcDirectory}/${files[i]}`);
 
             if (i === 0) {
@@ -41,20 +41,44 @@ async function main() {
                     height: imageHeight * rowCount,
                     color: 0x00000000
                 });
+
+                console.log(
+                    `Initialized spritesheet with dimensions ${spritesheet.width} x ${spritesheet.height}`);
             }
 
             if (currentColumn >= columnsCount) {
                 currentColumn = 0;
                 currentRow++;
-            } else if (i === files.length - 1 && files.length % columnsCount > 0) {
-                currentRow++;
             }
 
             const x = currentColumn * imageWidth;
             const y = currentRow * imageHeight;
+
+            console.log(`Appending image ${files[i]} to spritesheet...`)
             spritesheet.composite(image, x, y);
 
             currentColumn++;
+        }
+
+        if (files.length % columnsCount > 0) {
+            // There are some remaining images that did not
+            // fit cleanly into the columnCount by imageCount / coulmnCount
+            // dimensions.
+            currentRow++;
+            currentColumn = 0;
+            const startingIndex = files.length - files.length % columnsCount;
+            
+            for (let i=0; i < files.length % columnsCount; i++) {
+                const fileIndex = startingIndex + i;
+                const image = await Jimp.read(`${srcDirectory}/${files[fileIndex]}`);
+                const x = currentColumn * imageWidth;
+                const y = currentRow * imageHeight;
+
+                console.log(`Appending image ${files[fileIndex]} to spritesheet...`)
+                spritesheet.composite(image, x, y);
+
+                currentColumn++;
+            }
         }
 
         await spritesheet.write(destination);
