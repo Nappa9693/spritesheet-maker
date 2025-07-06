@@ -1,0 +1,15 @@
+{
+  "name": "spritesheet-maker",
+  "version": "1.0.0",
+  "description": "Create a single spritesheet from multiple images",
+  "license": "ISC",
+  "author": "nappa9693",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "jimp": "^1.6.0"
+  }
+}
